@@ -65,8 +65,10 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
-	if err := ensureNoMetadata(opts, branches[0]); err != nil {
-		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
+	if len(branches) != 0 {
+		if err := ensureNoMetadata(opts, branches[0]); err != nil {
+			return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
+		}
 	}
 	path, err := filepath.Abs(opts.InputPath)
 	if err != nil {
